@@ -3,104 +3,105 @@ package edu.kit.informatik;
 public class StringUtility {
     // Task 1
     public static String removeDuplicates(String word) {
-        if (word == null || word.isEmpty()) {
-            return word;
-        }
         String result = "";
+
         for (int i = 0; i < word.length(); i++) {
-            if (!result.contains(String.valueOf(word.charAt(i)))) {
-                result += String.valueOf(word.charAt(i));
+            char c = word.charAt(i);
+
+            if (!contains(c, result)) {
+                result += c;
             }
         }
+
         return result;
+    }
+
+    public static boolean contains(char c, String str) {
+        for (int i = 0; i < str.length(); i++) {
+            if (c == str.charAt(i)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Task 2
     public static String capitalizeWords(String sentence) {
-        if (sentence == null || sentence.length() == 0) {
-            return sentence;
-        }
-        // @method .split() Spilt the sentence (strings) into individual words
-        // (characters) at '(space)'
         String[] words = sentence.split(" ");
-        // Create a empty result String
         String result = "";
 
-        //
-        for (int i = 0; i < words.length; i++) {
-            String word = words[i];
-
-            if (!word.isEmpty()) {
-                char[] characters = word.toCharArray();
-                // Convert the first character to uppercase if it's a letter
-                if (Character.isLetter(characters[0])) {
-                    characters[0] = Character.toUpperCase(characters[0]);
+        for (String word : words) {
+            if (word.length() > 0) {
+                char firstChar = word.charAt(0);
+                if (isLetter(firstChar)) {
+                    char capitalizedChar = toUpperCase(firstChar);
+                    result += capitalizedChar + word.substring(1);
+                } else {
+                    result += word;
                 }
-                // Add a space if not the first word (index)
-                if (i > 0) {
-                    result += " ";
-                }
-                // Add the array of characters to the result string
-                result += String.valueOf(characters);
             }
+            result += " ";
         }
 
-        return result;
+        return result.trim();
+    }
+
+    private static boolean isLetter(char c) {
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    }
+
+    private static char toUpperCase(char c) {
+        if (c >= 'a' && c <= 'z') {
+            return (char) (c - 'a' + 'A');
+        }
+        return c;
     }
 
     // Task 3
+    public static boolean startsWithIgnoreCase(String word, String prefix) {
+        int wordLength = word.length();
+        int prefixLength = prefix.length();
+
+        if (prefixLength > wordLength) {
+            return false;
+        }
+
+        for (int i = 0; i < prefixLength; i++) {
+            char prefixChar = Character.toLowerCase(prefix.charAt(i));
+            char wordChar = Character.toLowerCase(word.charAt(i));
+
+            if (prefixChar != wordChar) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Task 4
     public static String reverse(String word) {
         if (word == null || word.isEmpty()) {
             return word;
         }
 
-        String reverse = "";
+        String result = "";
 
         for (int i = word.length() - 1; i >= 0; i--) {
-            reverse += word.charAt(i);
+            result += word.charAt(i);
         }
 
-        return reverse;
-    }
-
-    // Task 4
-    public static boolean startsWithIgnoreCase(String word, String prefix) {
-        if (word == null || prefix == null) {
-            return false; // return false, if word and prefix are empty
-        }
-
-        if (prefix.length() > word.length()) {
-            return false; // return false, if prefix is longer than word
-        }
-        // Intercept the substring from word, that meets the prefix length
-        String wordPrefix = word.substring(0, prefix.length());
-        /*
-         * @method .equlsIgnoreCase() Directly compare two extracted strings
-         * case-insensitively
-         */
-        return wordPrefix.equalsIgnoreCase(prefix);
+        return result;
     }
 
     // Task 5
     public static String reverseSentence(String sentence) {
-        if (sentence == null || sentence.isEmpty()) {
-            return sentence;
-        }
-
         String[] words = sentence.split(" ");
-        StringBuilder reversedSentence = new StringBuilder();
+        String reversed = "";
 
         for (int i = words.length - 1; i >= 0; i--) {
-            // @method .append() Add each word to the StringBuilder in reverse Order
-            reversedSentence.append(words[i]);
-            // Add '(space)' after each word
-            if (i > 0) {
-                reversedSentence.append(" ");
-            }
+            reversed += words[i] + " ";
         }
-        // @return The StringBuilder into String
-        return reversedSentence.toString();
 
+        return reversed.trim();
     }
-    
 }
