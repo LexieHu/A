@@ -3,74 +3,53 @@ package edu.kit.informatik;
 public class StringUtility {
     // Task 1
     public static String removeDuplicates(String word) {
-        String result = "";
-
-        for (int i = 0; i < word.length(); i++) {
-            char c = word.charAt(i);
-
-            if (!contains(c, result)) {
-                result += c;
+        char[] chars = word.toCharArray();
+        int index = 0;
+        for (int i = 0; i < chars.length; i++) {
+            boolean duplicate = false;
+            for (int j = 0; j < index; j++) {
+                if (chars[i] == chars[j]) {
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (!duplicate) {
+                chars[index] = chars[i];
+                index++;
             }
         }
-
-        return result;
-    }
-
-    public static boolean contains(char c, String str) {
-        for (int i = 0; i < str.length(); i++) {
-            if (c == str.charAt(i)) {
-                return true;
-            }
-        }
-        return false;
+        return new String(chars, 0, index);
     }
 
     // Task 2
     public static String capitalizeWords(String sentence) {
-        String[] words = sentence.split(" ");
-        String result = "";
+        char[] chars = sentence.toCharArray();
 
-        for (String word : words) {
-            if (word.length() > 0) {
-                char firstChar = word.charAt(0);
-                if (isLetter(firstChar)) {
-                    char capitalizedChar = toUpperCase(firstChar);
-                    result += capitalizedChar + word.substring(1);
-                } else {
-                    result += word;
-                }
+       
+        boolean capitalizeNext = true;
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == ' ') {
+                capitalizeNext = true;
+            } else if (capitalizeNext && (chars[i] >= 'a' && chars[i] <= 'z')) {
+                chars[i] = (char) (chars[i] - 32); 
+                capitalizeNext = false;
             }
-            result += " ";
         }
 
-        return result.trim();
-    }
-
-    private static boolean isLetter(char c) {
-        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-    }
-
-    private static char toUpperCase(char c) {
-        if (c >= 'a' && c <= 'z') {
-            return (char) (c - 'a' + 'A');
-        }
-        return c;
+        return new String(chars);
     }
 
     // Task 3
     public static boolean startsWithIgnoreCase(String word, String prefix) {
-        int wordLength = word.length();
-        int prefixLength = prefix.length();
-
-        if (prefixLength > wordLength) {
+        if (word.length() < prefix.length()) {
             return false;
         }
 
-        for (int i = 0; i < prefixLength; i++) {
-            char prefixChar = Character.toLowerCase(prefix.charAt(i));
-            char wordChar = Character.toLowerCase(word.charAt(i));
+        for (int i = 0; i < prefix.length(); i++) {
+            char wordChar = word.charAt(i);
+            char prefixChar = prefix.charAt(i);
 
-            if (prefixChar != wordChar) {
+            if (Character.toLowerCase(wordChar) != Character.toLowerCase(prefixChar)) {
                 return false;
             }
         }
@@ -96,12 +75,15 @@ public class StringUtility {
     // Task 5
     public static String reverseSentence(String sentence) {
         String[] words = sentence.split(" ");
-        String reversed = "";
 
+        String reversedSentence = "";
         for (int i = words.length - 1; i >= 0; i--) {
-            reversed += words[i] + " ";
+            reversedSentence += words[i];
+            if (i > 0) {
+                reversedSentence += " ";
+            }
         }
 
-        return reversed.trim();
+        return reversedSentence;
     }
 }
