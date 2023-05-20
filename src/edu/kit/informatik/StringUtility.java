@@ -20,7 +20,6 @@ public class StringUtility {
         }
         return new String(chars, 0, index);
     }
-
     // Task 2
     public static String capitalizeWords(String sentence) {
         char[] chars = sentence.toCharArray();
